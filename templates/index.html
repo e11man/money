@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block title %}MoneyWise - Elite Finance Platform{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="card text-center">
+        <div class="mb-8">
+            <div class="icon-container" style="width: 96px; height: 96px; margin: 0 auto var(--space-8) auto; background-color: var(--primary);">
+                <svg class="icon-xl" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 9V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2m2 4h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="16" cy="13" r="1" fill="white"/>
+                </svg>
+            </div>
+            <h1 class="mb-4">MoneyWise</h1>
+            <p class="text-lg text-gray-600 mb-8" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+                Elite financial management platform for professionals who demand precision, clarity, and results.
+            </p>
+        </div>
+        
+        <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <a href="/dashboard" class="btn btn-lg">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Get Started
+            </a>
+            <a href="/budget" class="btn btn-outline btn-lg">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Plan Budget
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Grid -->
+<section class="features-section">
+    <div class="text-center mb-12">
+        <h2 class="mb-4">Professional Financial Tools</h2>
+        <p class="text-lg text-gray-600" style="max-width: 600px; margin: 0 auto;">
+            Comprehensive suite of tools designed for serious wealth management
+        </p>
+    </div>
+    
+    <div class="row">
+        <div class="col-4">
+            <div class="card feature-card">
+                <div class="icon-container">
+                    <svg class="icon-xl" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="font-bold mb-4">Smart Budgeting</h3>
+                <p class="text-gray-600 mb-6">
+                    Advanced budget planning using proven methodologies. Create custom strategies with intelligent categorization and real-time tracking.
+                </p>
+                <a href="/budget" class="btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Plan Budget
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-4">
+            <div class="card feature-card">
+                <div class="icon-container">
+                    <svg class="icon-xl" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 9V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2m2 4h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="16" cy="13" r="1" fill="currentColor"/>
+                    </svg>
+                </div>
+                <h3 class="font-bold mb-4">Income Management</h3>
+                <p class="text-gray-600 mb-6">
+                    Track multiple revenue streams with precision. Handle salary, freelance, investments, and passive income with automated scheduling.
+                </p>
+                <a href="/income" class="btn btn-accent">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2v20m9-9H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Manage Income
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-4">
+            <div class="card feature-card">
+                <div class="icon-container">
+                    <svg class="icon-xl" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="font-bold mb-4">Expense Intelligence</h3>
+                <p class="text-gray-600 mb-6">
+                    Comprehensive expense tracking with intelligent categorization. Identify patterns, eliminate waste, and optimize spending habits.
+                </p>
+                <a href="/expenses" class="btn" style="background-color: var(--warning); color: var(--white);">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2m0-2v4h8V2m-8 6h8m-8 4h8m-8 4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Track Expenses
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-4">
+            <div class="card feature-card">
+                <div class="icon-container">
+                    <svg class="icon-xl" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="font-bold mb-4">Investment Analytics</h3>
+                <p class="text-gray-600 mb-6">
+                    Professional portfolio monitoring with institutional-grade analytics. Track performance, assess risk, and optimize returns.
+                </p>
+                <a href="/investments" class="btn" style="background-color: var(--success); color: var(--white);">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 11H7a2 2 0 00-2 2v7a2 2 0 002 2h2a2 2 0 002-2v-7a2 2 0 00-2-2zM13 7h2a2 2 0 012 2v11a2 2 0 01-2 2h-2a2 2 0 01-2-2V9a2 2 0 012-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    View Portfolio
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-4">
+            <div class="card feature-card">
+                <div class="icon-container">
+                    <svg class="icon-xl" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="font-bold mb-4">Future Projections</h3>
+                <p class="text-gray-600 mb-6">
+                    Advanced financial modeling to forecast your wealth trajectory. Predictive analytics for informed decision making.
+                </p>
+                <a href="/dashboard" class="btn btn-secondary">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 19c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 9l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    View Projections
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-4">
+            <div class="card feature-card">
+                <div class="icon-container">
+                    <svg class="icon-xl" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="font-bold mb-4">Advanced Settings</h3>
+                <p class="text-gray-600 mb-6">
+                    Comprehensive customization options. Configure currencies, reporting formats, and personalized financial preferences.
+                </p>
+                <a href="/preferences" class="btn btn-outline">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Customize
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Financial Overview -->
+<section class="financial-overview" id="financial-overview">
+    <div class="card" style="background-color: var(--gray-50); border: 2px solid var(--gray-200);">
+        <div class="text-center mb-8">
+            <h2 class="mb-4">Financial Overview</h2>
+            <p class="text-lg text-gray-600">Real-time snapshot of your financial position</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-3">
+                <div class="card text-center" style="border: 1px solid var(--gray-200); padding: var(--space-6);">
+                    <div class="icon-container" style="width: 48px; height: 48px; background-color: var(--success); color: white; margin: 0 auto var(--space-4) auto;">
+                        <svg class="icon-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-sm text-gray-700 font-semibold mb-2">Current Balance</h4>
+                    <div class="text-2xl font-bold text-success" id="current-balance">$0.00</div>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <div class="card text-center" style="border: 1px solid var(--gray-200); padding: var(--space-6);">
+                    <div class="icon-container" style="width: 48px; height: 48px; background-color: var(--accent); color: white; margin: 0 auto var(--space-4) auto;">
+                        <svg class="icon-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-sm text-gray-700 font-semibold mb-2">Monthly Income</h4>
+                    <div class="text-2xl font-bold text-accent" id="monthly-income">$0.00</div>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <div class="card text-center" style="border: 1px solid var(--gray-200); padding: var(--space-6);">
+                    <div class="icon-container" style="width: 48px; height: 48px; background-color: var(--warning); color: white; margin: 0 auto var(--space-4) auto;">
+                        <svg class="icon-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2m0-2v4h8V2m-8 6h8m-8 4h8m-8 4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-sm text-gray-700 font-semibold mb-2">Monthly Expenses</h4>
+                    <div class="text-2xl font-bold text-warning" id="monthly-expenses">$0.00</div>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <div class="card text-center" style="border: 1px solid var(--gray-200); padding: var(--space-6);">
+                    <div class="icon-container" style="width: 48px; height: 48px; background-color: var(--primary); color: white; margin: 0 auto var(--space-4) auto;">
+                        <svg class="icon-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-sm text-gray-700 font-semibold mb-2">Net Monthly</h4>
+                    <div class="text-2xl font-bold text-primary" id="net-monthly">$0.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Getting Started -->
+<section class="getting-started">
+    <div class="card">
+        <div class="text-center mb-12">
+            <h2 class="mb-4">Getting Started</h2>
+            <p class="text-lg text-gray-600" style="max-width: 600px; margin: 0 auto;">
+                Four essential steps to transform your financial management
+            </p>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div style="display: flex; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-8);">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background-color: var(--primary); color: white; border-radius: 50%; flex-shrink: 0; font-weight: 700;">1</div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Configure Budget Framework</h3>
+                        <p class="text-gray-600">
+                            Establish your budget foundation using proven allocation strategies. Set precise targets for needs, wants, and savings to create financial discipline.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div style="display: flex; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-8);">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background-color: var(--accent); color: white; border-radius: 50%; flex-shrink: 0; font-weight: 700;">2</div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Connect Revenue Streams</h3>
+                        <p class="text-gray-600">
+                            Link all income sources including salary, investments, freelance work, and passive revenue. Enable automated tracking for seamless monitoring.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div style="display: flex; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-8);">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background-color: var(--warning); color: white; border-radius: 50%; flex-shrink: 0; font-weight: 700;">3</div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Track Expense Patterns</h3>
+                        <p class="text-gray-600">
+                            Monitor all expenses with intelligent categorization. Identify spending patterns, eliminate inefficiencies, and maintain budget compliance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div style="display: flex; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-8);">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background-color: var(--success); color: white; border-radius: 50%; flex-shrink: 0; font-weight: 700;">4</div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Analyze & Optimize</h3>
+                        <p class="text-gray-600">
+                            Leverage advanced analytics to optimize your financial strategy. Use predictive modeling to forecast wealth accumulation and make informed decisions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Load financial overview data
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            const data = await apiCall('/api/data');
+            const projections = await apiCall('/api/projections');
+            
+            // Update current balance
+            document.getElementById('current-balance').textContent = formatCurrency(data.current_money);
+            
+            // Calculate monthly income and expenses
+            let monthlyIncome = 0;
+            let monthlyExpenses = 0;
+            
+            if (projections.length > 0) {
+                monthlyIncome = projections[0].income;
+                monthlyExpenses = projections[0].expenses;
+            }
+            
+            // Update display values
+            document.getElementById('monthly-income').textContent = formatCurrency(monthlyIncome);
+            document.getElementById('monthly-expenses').textContent = formatCurrency(monthlyExpenses);
+            
+            const netMonthly = monthlyIncome - monthlyExpenses;
+            const netElement = document.getElementById('net-monthly');
+            netElement.textContent = formatCurrency(netMonthly);
+            
+            // Dynamic color coding for net monthly
+            if (netMonthly >= 0) {
+                netElement.className = 'text-2xl font-bold text-success';
+            } else {
+                netElement.className = 'text-2xl font-bold text-error';
+            }
+            
+        } catch (error) {
+            console.error('Error loading financial overview:', error);
+            // Graceful fallback - keep default $0.00 values
+        }
+    });
+    
+    // Add progressive animation delays for feature cards
+    document.querySelectorAll('.feature-card').forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+    });
+</script>
+{% endblock %} 

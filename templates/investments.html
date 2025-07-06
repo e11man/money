@@ -1,0 +1,400 @@
+{% extends "base.html" %}
+
+{% block title %}Investment Tracking - MoneyWise{% endblock %}
+{% block nav_investments %}active{% endblock %}
+
+{% block content %}
+<div class="investments-header">
+    <div class="card">
+        <h2>Investment Tracking</h2>
+        <p>Monitor your investment portfolio and track expected returns</p>
+    </div>
+</div>
+
+<div class="investment-summary">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h4>Current Investments</h4>
+            <div class="value" id="current-investments">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Expected Annual ROI</h4>
+            <div class="value" id="expected-roi">0%</div>
+        </div>
+        <div class="stat-card">
+            <h4>Projected Annual Return</h4>
+            <div class="value" id="projected-return">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>5-Year Projection</h4>
+            <div class="value" id="five-year-projection">$0.00</div>
+        </div>
+    </div>
+</div>
+
+<div class="update-investments">
+    <div class="card">
+        <h3>Update Investment Information</h3>
+        <form id="investment-form">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="current-amount">Current Investment Amount</label>
+                        <input type="number" id="current-amount" class="form-control" step="0.01" min="0" placeholder="0.00">
+                        <small>Total value of all your current investments</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="expected-return">Expected Annual Return (%)</label>
+                        <input type="number" id="expected-return" class="form-control" step="0.01" min="0" max="100" placeholder="7.0">
+                        <small>Your expected annual return percentage (e.g., 7% for stock market average)</small>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Update Investments</button>
+        </form>
+    </div>
+</div>
+
+<div class="investment-projections">
+    <div class="card">
+        <h3>Investment Growth Projections</h3>
+        <div class="row">
+            <div class="col-6">
+                <canvas id="investmentChart"></canvas>
+            </div>
+            <div class="col-6">
+                <div class="projection-details">
+                    <h4>Compound Growth Projections</h4>
+                    <div class="projection-table">
+                        <div class="projection-row">
+                            <span>1 Year:</span>
+                            <span id="year-1">$0.00</span>
+                        </div>
+                        <div class="projection-row">
+                            <span>3 Years:</span>
+                            <span id="year-3">$0.00</span>
+                        </div>
+                        <div class="projection-row">
+                            <span>5 Years:</span>
+                            <span id="year-5">$0.00</span>
+                        </div>
+                        <div class="projection-row">
+                            <span>10 Years:</span>
+                            <span id="year-10">$0.00</span>
+                        </div>
+                        <div class="projection-row">
+                            <span>20 Years:</span>
+                            <span id="year-20">$0.00</span>
+                        </div>
+                        <div class="projection-row">
+                            <span>30 Years:</span>
+                            <span id="year-30">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="investment-tips">
+    <div class="card">
+        <h3>Investment Tips & Guidelines</h3>
+        <div class="row">
+            <div class="col-6">
+                <h4>Expected Returns by Asset Class</h4>
+                <ul>
+                    <li><strong>Stock Market (S&P 500):</strong> ~7-10% annually (historical average)</li>
+                    <li><strong>Bonds:</strong> ~3-5% annually</li>
+                    <li><strong>Real Estate:</strong> ~5-8% annually</li>
+                    <li><strong>High-Yield Savings:</strong> ~1-3% annually</li>
+                    <li><strong>CDs:</strong> ~2-4% annually</li>
+                    <li><strong>International Stocks:</strong> ~6-9% annually</li>
+                </ul>
+            </div>
+            <div class="col-6">
+                <h4>Investment Best Practices</h4>
+                <ul>
+                    <li>Diversify your portfolio across different asset classes</li>
+                    <li>Consider low-cost index funds for broad market exposure</li>
+                    <li>Don't try to time the market - invest consistently</li>
+                    <li>Review and rebalance your portfolio annually</li>
+                    <li>Keep emergency fund separate from investments</li>
+                    <li>Consider tax-advantaged accounts (401k, IRA, Roth IRA)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="compound-interest">
+    <div class="card">
+        <h3>Compound Interest Calculator</h3>
+        <p>See how regular monthly contributions can accelerate your investment growth</p>
+        <form id="compound-form">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="monthly-contribution">Monthly Contribution</label>
+                        <input type="number" id="monthly-contribution" class="form-control" step="0.01" min="0" placeholder="500.00">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="time-horizon">Time Horizon (Years)</label>
+                        <input type="number" id="time-horizon" class="form-control" min="1" max="50" value="30">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="contribution-roi">Annual Return (%)</label>
+                        <input type="number" id="contribution-roi" class="form-control" step="0.01" min="0" max="100" value="7">
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn" onclick="calculateCompoundGrowth()">Calculate Growth</button>
+        </form>
+        
+        <div id="compound-results" style="display: none; margin-top: 2rem;">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Contributions</h4>
+                    <div class="value" id="total-contributions">$0.00</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Investment Growth</h4>
+                    <div class="value" id="investment-growth">$0.00</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Final Value</h4>
+                    <div class="value" id="final-value">$0.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.projection-details {
+    padding: 1rem;
+}
+
+.projection-table {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.projection-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.projection-row:last-child {
+    border-bottom: none;
+}
+
+.projection-row:nth-child(even) {
+    background: rgba(0, 122, 255, 0.05);
+}
+
+.projection-row span:first-child {
+    font-weight: 500;
+}
+
+.projection-row span:last-child {
+    font-weight: 600;
+    color: #28a745;
+}
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let investmentChart;
+    let currentData = {};
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        loadInvestmentData();
+        setupEventListeners();
+    });
+    
+    function setupEventListeners() {
+        document.getElementById('investment-form').addEventListener('submit', updateInvestments);
+    }
+    
+    async function loadInvestmentData() {
+        try {
+            const data = await apiCall('/api/data');
+            currentData = data;
+            
+            // Update form values
+            document.getElementById('current-amount').value = data.investments || 0;
+            document.getElementById('expected-return').value = data.expected_roi || 7;
+            
+            updateInvestmentSummary();
+            updateProjections();
+            updateInvestmentChart();
+            
+        } catch (error) {
+            console.error('Error loading investment data:', error);
+            showNotification('Error loading investment data', 'error');
+        }
+    }
+    
+    function updateInvestmentSummary() {
+        const investments = currentData.investments || 0;
+        const roi = currentData.expected_roi || 7;
+        
+        document.getElementById('current-investments').textContent = formatCurrency(investments);
+        document.getElementById('expected-roi').textContent = roi + '%';
+        
+        const annualReturn = investments * (roi / 100);
+        document.getElementById('projected-return').textContent = formatCurrency(annualReturn);
+        
+        const fiveYearValue = investments * Math.pow(1 + (roi / 100), 5);
+        document.getElementById('five-year-projection').textContent = formatCurrency(fiveYearValue);
+    }
+    
+    function updateProjections() {
+        const currentAmount = currentData.investments || 0;
+        const roi = (currentData.expected_roi || 7) / 100;
+        
+        const years = [1, 3, 5, 10, 20, 30];
+        years.forEach(year => {
+            const futureValue = currentAmount * Math.pow(1 + roi, year);
+            document.getElementById(`year-${year}`).textContent = formatCurrency(futureValue);
+        });
+    }
+    
+    function updateInvestmentChart() {
+        const ctx = document.getElementById('investmentChart').getContext('2d');
+        
+        if (investmentChart) {
+            investmentChart.destroy();
+        }
+        
+        const currentAmount = currentData.investments || 0;
+        const roi = (currentData.expected_roi || 7) / 100;
+        
+        const years = [];
+        const values = [];
+        
+        for (let year = 0; year <= 30; year++) {
+            years.push(year);
+            values.push(currentAmount * Math.pow(1 + roi, year));
+        }
+        
+        investmentChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [{
+                    label: 'Investment Value',
+                    data: values,
+                    borderColor: '#007AFF',
+                    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Years'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Value ($)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Value: ' + formatCurrency(context.parsed.y);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    async function updateInvestments(event) {
+        event.preventDefault();
+        
+        const investments = parseFloat(document.getElementById('current-amount').value) || 0;
+        const expectedRoi = parseFloat(document.getElementById('expected-return').value) || 7;
+        
+        const updatedData = {
+            ...currentData,
+            investments: investments,
+            expected_roi: expectedRoi
+        };
+        
+        try {
+            await apiCall('/api/data', 'POST', updatedData);
+            showNotification('Investment information updated successfully!');
+            
+            currentData = updatedData;
+            updateInvestmentSummary();
+            updateProjections();
+            updateInvestmentChart();
+            
+        } catch (error) {
+            console.error('Error updating investments:', error);
+            showNotification('Error updating investments', 'error');
+        }
+    }
+    
+    function calculateCompoundGrowth() {
+        const monthlyContribution = parseFloat(document.getElementById('monthly-contribution').value) || 0;
+        const timeHorizon = parseInt(document.getElementById('time-horizon').value) || 30;
+        const roi = parseFloat(document.getElementById('contribution-roi').value) || 7;
+        
+        const currentAmount = currentData.investments || 0;
+        const monthlyRate = roi / 100 / 12;
+        const totalMonths = timeHorizon * 12;
+        
+        // Calculate future value of current investments
+        const currentGrowth = currentAmount * Math.pow(1 + roi / 100, timeHorizon);
+        
+        // Calculate future value of monthly contributions (annuity)
+        let contributionGrowth = 0;
+        if (monthlyRate > 0) {
+            contributionGrowth = monthlyContribution * (Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate;
+        } else {
+            contributionGrowth = monthlyContribution * totalMonths;
+        }
+        
+        const totalContributions = monthlyContribution * totalMonths;
+        const totalGrowth = currentGrowth + contributionGrowth - currentAmount - totalContributions;
+        const finalValue = currentGrowth + contributionGrowth;
+        
+        // Update display
+        document.getElementById('total-contributions').textContent = formatCurrency(totalContributions);
+        document.getElementById('investment-growth').textContent = formatCurrency(totalGrowth);
+        document.getElementById('final-value').textContent = formatCurrency(finalValue);
+        
+        document.getElementById('compound-results').style.display = 'block';
+    }
+</script>
+{% endblock %} 

@@ -1,0 +1,555 @@
+{% extends "base.html" %}
+
+{% block title %}Expense Management - MoneyWise{% endblock %}
+{% block nav_expenses %}active{% endblock %}
+
+{% block content %}
+<div class="expense-header">
+    <div class="card">
+        <h2>Expense Management</h2>
+        <p>Track and categorize all your expenses with flexible scheduling</p>
+    </div>
+</div>
+
+<div class="expense-summary">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h4>Total Monthly Expenses</h4>
+            <div class="value" id="total-monthly">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Needs</h4>
+            <div class="value" id="needs-total">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Wants</h4>
+            <div class="value" id="wants-total">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Savings</h4>
+            <div class="value" id="savings-total">$0.00</div>
+        </div>
+    </div>
+</div>
+
+<div class="add-expense">
+    <div class="card">
+        <h3>Add New Expense</h3>
+        <form id="expense-form">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="expense-name">Name</label>
+                        <input type="text" id="expense-name" class="form-control" required placeholder="e.g., Rent, Groceries, Netflix">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="expense-amount">Amount</label>
+                        <input type="number" id="expense-amount" class="form-control" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="expense-category">Category</label>
+                        <select id="expense-category" class="form-control" required>
+                            <option value="needs">Needs</option>
+                            <option value="wants">Wants</option>
+                            <option value="savings">Savings</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="expense-description">Description (Optional)</label>
+                <textarea id="expense-description" class="form-control" rows="3" placeholder="Additional details about this expense"></textarea>
+            </div>
+            
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="expense-type">Type</label>
+                        <select id="expense-type" class="form-control" required>
+                            <option value="recurring">Recurring</option>
+                            <option value="one-time">One-time</option>
+                            <option value="specific-months">Specific Months</option>
+                            <option value="monthly-until">Monthly Until</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group" id="frequency-group">
+                        <label for="expense-frequency">Frequency</label>
+                        <select id="expense-frequency" class="form-control">
+                            <option value="weekly">Weekly</option>
+                            <option value="biweekly">Biweekly</option>
+                            <option value="monthly" selected>Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="conditional-fields">
+                <div class="form-group" id="date-group" style="display: none;">
+                    <label for="expense-date">Date</label>
+                    <input type="date" id="expense-date" class="form-control">
+                </div>
+                
+                <div class="form-group" id="months-group" style="display: none;">
+                    <label>Select Months</label>
+                    <div class="months-selector">
+                        <div class="row">
+                            <div class="col-3">
+                                <label><input type="checkbox" value="1"> January</label>
+                                <label><input type="checkbox" value="2"> February</label>
+                                <label><input type="checkbox" value="3"> March</label>
+                            </div>
+                            <div class="col-3">
+                                <label><input type="checkbox" value="4"> April</label>
+                                <label><input type="checkbox" value="5"> May</label>
+                                <label><input type="checkbox" value="6"> June</label>
+                            </div>
+                            <div class="col-3">
+                                <label><input type="checkbox" value="7"> July</label>
+                                <label><input type="checkbox" value="8"> August</label>
+                                <label><input type="checkbox" value="9"> September</label>
+                            </div>
+                            <div class="col-3">
+                                <label><input type="checkbox" value="10"> October</label>
+                                <label><input type="checkbox" value="11"> November</label>
+                                <label><input type="checkbox" value="12"> December</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="end-date-group" style="display: none;">
+                    <label for="expense-end-date">End Date</label>
+                    <input type="date" id="expense-end-date" class="form-control">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Add Expense</button>
+        </form>
+    </div>
+</div>
+
+<div class="expense-categories">
+    <div class="card">
+        <h3>Expenses by Category</h3>
+        <div class="row">
+            <div class="col-4">
+                <div class="category-section">
+                    <h4 style="color: #007AFF;">Needs</h4>
+                    <div id="needs-expenses">
+                        <!-- Needs expenses will be populated here -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="category-section">
+                    <h4 style="color: #28a745;">Wants</h4>
+                    <div id="wants-expenses">
+                        <!-- Wants expenses will be populated here -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="category-section">
+                    <h4 style="color: #ffc107;">Savings</h4>
+                    <div id="savings-expenses">
+                        <!-- Savings expenses will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="expense-tips">
+    <div class="card">
+        <h3>Expense Categories Guide</h3>
+        <div class="row">
+            <div class="col-4">
+                <h4>Needs (Essential)</h4>
+                <ul>
+                    <li>Housing (rent/mortgage)</li>
+                    <li>Utilities (electricity, water, gas)</li>
+                    <li>Groceries</li>
+                    <li>Transportation</li>
+                    <li>Insurance</li>
+                    <li>Minimum debt payments</li>
+                    <li>Basic clothing</li>
+                </ul>
+            </div>
+            <div class="col-4">
+                <h4>Wants (Lifestyle)</h4>
+                <ul>
+                    <li>Dining out</li>
+                    <li>Entertainment</li>
+                    <li>Hobbies</li>
+                    <li>Shopping</li>
+                    <li>Subscriptions</li>
+                    <li>Vacations</li>
+                    <li>Luxury items</li>
+                </ul>
+            </div>
+            <div class="col-4">
+                <h4>Savings (Future)</h4>
+                <ul>
+                    <li>Emergency fund</li>
+                    <li>Retirement savings</li>
+                    <li>Investments</li>
+                    <li>Extra debt payments</li>
+                    <li>Savings goals</li>
+                    <li>Education fund</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.expense-source {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.expense-source.inactive {
+    opacity: 0.6;
+    background: rgba(220, 220, 220, 0.3);
+}
+
+.expense-source.needs {
+    border-left: 4px solid #007AFF;
+}
+
+.expense-source.wants {
+    border-left: 4px solid #28a745;
+}
+
+.expense-source.savings {
+    border-left: 4px solid #ffc107;
+}
+
+.expense-source-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.expense-source-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.expense-source-amount {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #dc3545;
+}
+
+.expense-source-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.expense-source-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.expense-source-actions button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+}
+
+.category-section {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.months-selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.months-selector label {
+    display: block;
+    margin-bottom: 0.3rem;
+}
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let expenseSources = [];
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        loadExpenseSources();
+        setupEventListeners();
+    });
+    
+    function setupEventListeners() {
+        document.getElementById('expense-form').addEventListener('submit', addExpenseSource);
+        document.getElementById('expense-type').addEventListener('change', updateConditionalFields);
+    }
+    
+    function updateConditionalFields() {
+        const type = document.getElementById('expense-type').value;
+        const frequencyGroup = document.getElementById('frequency-group');
+        const dateGroup = document.getElementById('date-group');
+        const monthsGroup = document.getElementById('months-group');
+        const endDateGroup = document.getElementById('end-date-group');
+        
+        // Hide all conditional fields
+        dateGroup.style.display = 'none';
+        monthsGroup.style.display = 'none';
+        endDateGroup.style.display = 'none';
+        frequencyGroup.style.display = 'block';
+        
+        // Show relevant fields based on type
+        if (type === 'one-time') {
+            dateGroup.style.display = 'block';
+            frequencyGroup.style.display = 'none';
+        } else if (type === 'specific-months') {
+            monthsGroup.style.display = 'block';
+            frequencyGroup.style.display = 'none';
+        } else if (type === 'monthly-until') {
+            endDateGroup.style.display = 'block';
+            frequencyGroup.style.display = 'none';
+        }
+    }
+    
+    async function loadExpenseSources() {
+        try {
+            const data = await apiCall('/api/data');
+            expenseSources = data.expense_sources;
+            
+            updateSummary();
+            renderExpensesByCategory();
+            
+        } catch (error) {
+            console.error('Error loading expense sources:', error);
+            showNotification('Error loading expense sources', 'error');
+        }
+    }
+    
+    function updateSummary() {
+        let totalMonthly = 0;
+        let needsTotal = 0;
+        let wantsTotal = 0;
+        let savingsTotal = 0;
+        
+        expenseSources.forEach(source => {
+            if (source.active !== false) {
+                const monthlyAmount = calculateMonthlyAmount(source);
+                totalMonthly += monthlyAmount;
+                
+                if (source.category === 'needs') {
+                    needsTotal += monthlyAmount;
+                } else if (source.category === 'wants') {
+                    wantsTotal += monthlyAmount;
+                } else if (source.category === 'savings') {
+                    savingsTotal += monthlyAmount;
+                }
+            }
+        });
+        
+        document.getElementById('total-monthly').textContent = formatCurrency(totalMonthly);
+        document.getElementById('needs-total').textContent = formatCurrency(needsTotal);
+        document.getElementById('wants-total').textContent = formatCurrency(wantsTotal);
+        document.getElementById('savings-total').textContent = formatCurrency(savingsTotal);
+    }
+    
+    function calculateMonthlyAmount(source) {
+        if (source.type === 'recurring') {
+            switch (source.frequency) {
+                case 'weekly': return source.amount * 4.33;
+                case 'biweekly': return source.amount * 2.17;
+                case 'monthly': return source.amount;
+                case 'quarterly': return source.amount / 3;
+                case 'yearly': return source.amount / 12;
+                default: return source.amount;
+            }
+        } else if (source.type === 'one-time') {
+            return source.amount; // Simplified for display
+        }
+        return source.amount;
+    }
+    
+    function renderExpensesByCategory() {
+        const needsContainer = document.getElementById('needs-expenses');
+        const wantsContainer = document.getElementById('wants-expenses');
+        const savingsContainer = document.getElementById('savings-expenses');
+        
+        needsContainer.innerHTML = '';
+        wantsContainer.innerHTML = '';
+        savingsContainer.innerHTML = '';
+        
+        const needsExpenses = expenseSources.filter(s => s.category === 'needs');
+        const wantsExpenses = expenseSources.filter(s => s.category === 'wants');
+        const savingsExpenses = expenseSources.filter(s => s.category === 'savings');
+        
+        renderExpensesInContainer(needsExpenses, needsContainer);
+        renderExpensesInContainer(wantsExpenses, wantsContainer);
+        renderExpensesInContainer(savingsExpenses, savingsContainer);
+    }
+    
+    function renderExpensesInContainer(expenses, container) {
+        if (expenses.length === 0) {
+            container.innerHTML = '<p>No expenses in this category yet.</p>';
+            return;
+        }
+        
+        expenses.forEach(source => {
+            const sourceElement = document.createElement('div');
+            sourceElement.className = `expense-source ${source.category} ${source.active === false ? 'inactive' : ''}`;
+            
+            const typeDisplay = getTypeDisplay(source);
+            const monthlyAmount = calculateMonthlyAmount(source);
+            
+            sourceElement.innerHTML = `
+                <div class="expense-source-header">
+                    <div class="expense-source-name">${source.name}</div>
+                    <div class="expense-source-amount">${formatCurrency(source.amount)}</div>
+                </div>
+                <div class="expense-source-details">
+                    <div>
+                        <small>${typeDisplay}</small>
+                        ${source.description ? `<br><small>${source.description}</small>` : ''}
+                        <br><small>Monthly: ${formatCurrency(monthlyAmount)}</small>
+                    </div>
+                    <div class="expense-source-actions">
+                        <button class="btn ${source.active === false ? 'btn-success' : 'btn-secondary'}" 
+                                onclick="toggleExpenseSource(${source.id})">
+                            ${source.active === false ? 'On' : 'Off'}
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteExpenseSource(${source.id})">Del</button>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(sourceElement);
+        });
+    }
+    
+    function getTypeDisplay(source) {
+        if (source.type === 'recurring') {
+            return `${source.frequency} recurring`;
+        } else if (source.type === 'one-time') {
+            return `One-time on ${source.date}`;
+        } else if (source.type === 'specific-months') {
+            return `Specific months: ${source.months ? source.months.join(', ') : 'Not specified'}`;
+        } else if (source.type === 'monthly-until') {
+            return `Monthly until ${source.endDate}`;
+        }
+        return source.type;
+    }
+    
+    async function addExpenseSource(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('expense-name').value;
+        const amount = parseFloat(document.getElementById('expense-amount').value);
+        const category = document.getElementById('expense-category').value;
+        const description = document.getElementById('expense-description').value;
+        const type = document.getElementById('expense-type').value;
+        const frequency = document.getElementById('expense-frequency').value;
+        const date = document.getElementById('expense-date').value;
+        const endDate = document.getElementById('expense-end-date').value;
+        
+        // Get selected months
+        const monthCheckboxes = document.querySelectorAll('#months-group input[type="checkbox"]:checked');
+        const months = Array.from(monthCheckboxes).map(cb => parseInt(cb.value));
+        
+        const newSource = {
+            name,
+            amount,
+            category,
+            description,
+            type,
+            active: true
+        };
+        
+        // Add type-specific fields
+        if (type === 'recurring') {
+            newSource.frequency = frequency;
+        } else if (type === 'one-time') {
+            newSource.date = date;
+        } else if (type === 'specific-months') {
+            newSource.months = months;
+        } else if (type === 'monthly-until') {
+            newSource.endDate = endDate;
+        }
+        
+        try {
+            await apiCall('/api/expense-sources', 'POST', newSource);
+            showNotification('Expense added successfully!');
+            
+            // Reset form
+            document.getElementById('expense-form').reset();
+            updateConditionalFields();
+            
+            // Reload data
+            loadExpenseSources();
+            
+        } catch (error) {
+            console.error('Error adding expense source:', error);
+            showNotification('Error adding expense source', 'error');
+        }
+    }
+    
+    async function toggleExpenseSource(id) {
+        const source = expenseSources.find(s => s.id === id);
+        if (!source) return;
+        
+        const updatedSource = {
+            ...source,
+            active: !source.active
+        };
+        
+        try {
+            await apiCall(`/api/expense-sources/${id}`, 'PUT', updatedSource);
+            showNotification(`Expense ${updatedSource.active ? 'activated' : 'deactivated'}!`);
+            
+            loadExpenseSources();
+            
+        } catch (error) {
+            console.error('Error toggling expense source:', error);
+            showNotification('Error updating expense source', 'error');
+        }
+    }
+    
+    async function deleteExpenseSource(id) {
+        if (!confirm('Are you sure you want to delete this expense?')) {
+            return;
+        }
+        
+        try {
+            await apiCall(`/api/expense-sources/${id}`, 'DELETE');
+            showNotification('Expense deleted successfully!');
+            
+            loadExpenseSources();
+            
+        } catch (error) {
+            console.error('Error deleting expense source:', error);
+            showNotification('Error deleting expense source', 'error');
+        }
+    }
+</script>
+{% endblock %} 

@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MoneyWise{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="card">
+        <h2>Financial Dashboard</h2>
+        <p>Your complete financial overview at a glance</p>
+    </div>
+</div>
+
+<div class="stats-overview">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h4>Current Balance</h4>
+            <div class="value" id="current-balance">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Monthly Income</h4>
+            <div class="value" id="monthly-income">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Monthly Expenses</h4>
+            <div class="value" id="monthly-expenses">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Net Monthly</h4>
+            <div class="value" id="net-monthly">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Investments</h4>
+            <div class="value" id="investments">$0.00</div>
+        </div>
+        <div class="stat-card">
+            <h4>Projected Balance (12 months)</h4>
+            <div class="value" id="projected-balance">$0.00</div>
+        </div>
+    </div>
+</div>
+
+<div class="charts-section">
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <h3>Balance Projections</h3>
+                <canvas id="balanceChart"></canvas>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <h3>Monthly Income vs Expenses</h3>
+                <canvas id="incomeExpenseChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <h3>Budget Breakdown</h3>
+                <canvas id="budgetChart"></canvas>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <h3>Expense Categories</h3>
+                <canvas id="expenseCategoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="budget-overview">
+    <div class="card">
+        <h2>Budget Overview</h2>
+        <div class="budget-section">
+            <div class="row">
+                <div class="col-4">
+                    <h4>Needs (<span id="needs-percentage">50</span>%)</h4>
+                    <div class="progress">
+                        <div class="progress-bar" id="needs-progress" style="width: 0%; background: #007AFF;"></div>
+                    </div>
+                    <p>Budgeted: <span id="needs-budgeted">$0.00</span></p>
+                    <p>Actual: <span id="needs-actual">$0.00</span></p>
+                </div>
+                <div class="col-4">
+                    <h4>Wants (<span id="wants-percentage">30</span>%)</h4>
+                    <div class="progress">
+                        <div class="progress-bar" id="wants-progress" style="width: 0%; background: #28a745;"></div>
+                    </div>
+                    <p>Budgeted: <span id="wants-budgeted">$0.00</span></p>
+                    <p>Actual: <span id="wants-actual">$0.00</span></p>
+                </div>
+                <div class="col-4">
+                    <h4>Savings (<span id="savings-percentage">20</span>%)</h4>
+                    <div class="progress">
+                        <div class="progress-bar" id="savings-progress" style="width: 0%; background: #ffc107;"></div>
+                    </div>
+                    <p>Budgeted: <span id="savings-budgeted">$0.00</span></p>
+                    <p>Actual: <span id="savings-actual">$0.00</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-activity">
+    <div class="card">
+        <h2>Recent Activity</h2>
+        <div class="activity-section">
+            <div class="row">
+                <div class="col-6">
+                    <h3>Income Sources</h3>
+                    <div id="income-sources-list">
+                        <!-- Income sources will be populated here -->
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h3>Expense Sources</h3>
+                    <div id="expense-sources-list">
+                        <!-- Expense sources will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <div class="card">
+        <h2>Quick Actions</h2>
+        <div class="actions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <a href="/income" class="btn btn-success">Add Income Source</a>
+            <a href="/expenses" class="btn btn-danger">Add Expense</a>
+            <a href="/budget" class="btn btn-secondary">Update Budget</a>
+            <a href="/investments" class="btn">Update Investments</a>
+            <a href="/preferences" class="btn btn-secondary">Settings</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let balanceChart, incomeExpenseChart, budgetChart, expenseCategoryChart;
+    
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            await loadDashboardData();
+        } catch (error) {
+            console.error('Error loading dashboard:', error);
+            showNotification('Error loading dashboard data', 'error');
+        }
+    });
+    
+    async function loadDashboardData() {
+        const data = await apiCall('/api/data');
+        const projections = await apiCall('/api/projections');
+        
+        // Update overview stats
+        updateOverviewStats(data, projections);
+        
+        // Update budget overview
+        updateBudgetOverview(data, projections);
+        
+        // Update charts
+        updateBalanceChart(projections);
+        updateIncomeExpenseChart(projections);
+        updateBudgetChart(data);
+        updateExpenseCategoryChart(data);
+        
+        // Update recent activity
+        updateRecentActivity(data);
+    }
+    
+    function updateOverviewStats(data, projections) {
+        document.getElementById('current-balance').textContent = formatCurrency(data.current_money);
+        document.getElementById('investments').textContent = formatCurrency(data.investments);
+        
+        if (projections.length > 0) {
+            const currentMonth = projections[0];
+            document.getElementById('monthly-income').textContent = formatCurrency(currentMonth.income);
+            document.getElementById('monthly-expenses').textContent = formatCurrency(currentMonth.expenses);
+            document.getElementById('net-monthly').textContent = formatCurrency(currentMonth.income - currentMonth.expenses);
+            
+            // Set color for net monthly
+            const netElement = document.getElementById('net-monthly');
+            if (currentMonth.income - currentMonth.expenses >= 0) {
+                netElement.style.color = '#28a745';
+            } else {
+                netElement.style.color = '#dc3545';
+            }
+            
+            // Show projected balance for 12 months
+            const projectedBalance = projections[projections.length - 1]?.balance || 0;
+            document.getElementById('projected-balance').textContent = formatCurrency(projectedBalance);
+        }
+    }
+    
+    function updateBudgetOverview(data, projections) {
+        const budgetRules = data.budget_rules;
+        const currentMonth = projections[0] || { income: 0, expenses: 0 };
+        
+        // Update percentages
+        document.getElementById('needs-percentage').textContent = budgetRules.needs;
+        document.getElementById('wants-percentage').textContent = budgetRules.wants;
+        document.getElementById('savings-percentage').textContent = budgetRules.savings;
+        
+        // Calculate budgeted amounts
+        const needsBudgeted = (currentMonth.income * budgetRules.needs) / 100;
+        const wantsBudgeted = (currentMonth.income * budgetRules.wants) / 100;
+        const savingsBudgeted = (currentMonth.income * budgetRules.savings) / 100;
+        
+        document.getElementById('needs-budgeted').textContent = formatCurrency(needsBudgeted);
+        document.getElementById('wants-budgeted').textContent = formatCurrency(wantsBudgeted);
+        document.getElementById('savings-budgeted').textContent = formatCurrency(savingsBudgeted);
+        
+        // Calculate actual expenses by category
+        let needsActual = 0, wantsActual = 0, savingsActual = 0;
+        
+        data.expense_sources.forEach(source => {
+            if (source.active) {
+                const amount = calculateSourceAmount(source);
+                if (source.category === 'needs') needsActual += amount;
+                else if (source.category === 'wants') wantsActual += amount;
+                else if (source.category === 'savings') savingsActual += amount;
+            }
+        });
+        
+        document.getElementById('needs-actual').textContent = formatCurrency(needsActual);
+        document.getElementById('wants-actual').textContent = formatCurrency(wantsActual);
+        document.getElementById('savings-actual').textContent = formatCurrency(savingsActual);
+        
+        // Update progress bars
+        if (needsBudgeted > 0) {
+            const needsProgress = Math.min((needsActual / needsBudgeted) * 100, 100);
+            document.getElementById('needs-progress').style.width = needsProgress + '%';
+        }
+        
+        if (wantsBudgeted > 0) {
+            const wantsProgress = Math.min((wantsActual / wantsBudgeted) * 100, 100);
+            document.getElementById('wants-progress').style.width = wantsProgress + '%';
+        }
+        
+        if (savingsBudgeted > 0) {
+            const savingsProgress = Math.min((savingsActual / savingsBudgeted) * 100, 100);
+            document.getElementById('savings-progress').style.width = savingsProgress + '%';
+        }
+    }
+    
+    function updateBalanceChart(projections) {
+        const ctx = document.getElementById('balanceChart').getContext('2d');
+        
+        if (balanceChart) {
+            balanceChart.destroy();
+        }
+        
+        balanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: projections.map(p => new Date(p.month).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })),
+                datasets: [{
+                    label: 'Balance',
+                    data: projections.map(p => p.balance),
+                    borderColor: '#007AFF',
+                    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateIncomeExpenseChart(projections) {
+        const ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+        
+        if (incomeExpenseChart) {
+            incomeExpenseChart.destroy();
+        }
+        
+        incomeExpenseChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: projections.slice(0, 6).map(p => new Date(p.month).toLocaleDateString('en-US', { month: 'short' })),
+                datasets: [{
+                    label: 'Income',
+                    data: projections.slice(0, 6).map(p => p.income),
+                    backgroundColor: '#28a745'
+                }, {
+                    label: 'Expenses',
+                    data: projections.slice(0, 6).map(p => p.expenses),
+                    backgroundColor: '#dc3545'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateBudgetChart(data) {
+        const ctx = document.getElementById('budgetChart').getContext('2d');
+        
+        if (budgetChart) {
+            budgetChart.destroy();
+        }
+        
+        budgetChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Needs', 'Wants', 'Savings'],
+                datasets: [{
+                    data: [data.budget_rules.needs, data.budget_rules.wants, data.budget_rules.savings],
+                    backgroundColor: ['#007AFF', '#28a745', '#ffc107']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateExpenseCategoryChart(data) {
+        const ctx = document.getElementById('expenseCategoryChart').getContext('2d');
+        
+        if (expenseCategoryChart) {
+            expenseCategoryChart.destroy();
+        }
+        
+        // Calculate expense totals by category
+        let needs = 0, wants = 0, savings = 0;
+        
+        data.expense_sources.forEach(source => {
+            if (source.active) {
+                const amount = calculateSourceAmount(source);
+                if (source.category === 'needs') needs += amount;
+                else if (source.category === 'wants') wants += amount;
+                else if (source.category === 'savings') savings += amount;
+            }
+        });
+        
+        expenseCategoryChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Needs', 'Wants', 'Savings'],
+                datasets: [{
+                    data: [needs, wants, savings],
+                    backgroundColor: ['#007AFF', '#28a745', '#ffc107']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateRecentActivity(data) {
+        // Update income sources
+        const incomeList = document.getElementById('income-sources-list');
+        incomeList.innerHTML = '';
+        
+        data.income_sources.slice(0, 5).forEach(source => {
+            const div = document.createElement('div');
+            div.style.cssText = 'padding: 0.5rem; margin-bottom: 0.5rem; background: rgba(0, 122, 255, 0.1); border-radius: 6px;';
+            div.innerHTML = `
+                <strong>${source.name}</strong><br>
+                <small>${formatCurrency(source.amount)} - ${source.frequency || source.type}</small>
+            `;
+            incomeList.appendChild(div);
+        });
+        
+        // Update expense sources
+        const expenseList = document.getElementById('expense-sources-list');
+        expenseList.innerHTML = '';
+        
+        data.expense_sources.slice(0, 5).forEach(source => {
+            const div = document.createElement('div');
+            div.style.cssText = 'padding: 0.5rem; margin-bottom: 0.5rem; background: rgba(220, 53, 69, 0.1); border-radius: 6px;';
+            div.innerHTML = `
+                <strong>${source.name}</strong><br>
+                <small>${formatCurrency(source.amount)} - ${source.category}</small>
+            `;
+            expenseList.appendChild(div);
+        });
+    }
+    
+    function calculateSourceAmount(source) {
+        if (source.type === 'recurring' && source.frequency === 'monthly') {
+            return source.amount;
+        } else if (source.type === 'recurring' && source.frequency === 'weekly') {
+            return source.amount * 4.33;
+        } else if (source.type === 'recurring' && source.frequency === 'biweekly') {
+            return source.amount * 2.17;
+        } else if (source.type === 'recurring' && source.frequency === 'yearly') {
+            return source.amount / 12;
+        }
+        return source.amount;
+    }
+</script>
+{% endblock %} 

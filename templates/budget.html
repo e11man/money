@@ -1,0 +1,458 @@
+{% extends "base.html" %}
+
+{% block title %}Budget Planning - MoneyWise{% endblock %}
+{% block nav_budget %}active{% endblock %}
+
+{% block content %}
+<div class="budget-header">
+    <div class="card">
+        <h2>Budget Planning</h2>
+        <p>Create and customize your budget using proven methods or your own rules</p>
+    </div>
+</div>
+
+<div class="budget-setup">
+    <div class="card">
+        <h3>Budget Rules</h3>
+        <p>Customize your budget percentages. The total must equal 100%.</p>
+        
+        <form id="budget-form">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="needs-percentage">Needs (%)</label>
+                        <input type="number" id="needs-percentage" class="form-control" min="0" max="100" value="50">
+                        <small>Essential expenses like rent, groceries, utilities</small>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="wants-percentage">Wants (%)</label>
+                        <input type="number" id="wants-percentage" class="form-control" min="0" max="100" value="30">
+                        <small>Entertainment, dining out, hobbies</small>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="savings-percentage">Savings (%)</label>
+                        <input type="number" id="savings-percentage" class="form-control" min="0" max="100" value="20">
+                        <small>Emergency fund, retirement, investments</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="total-display">
+                    <strong>Total: <span id="total-percentage">100</span>%</strong>
+                    <span id="total-warning" style="color: #dc3545; display: none;">Total must equal 100%</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h4>Quick Presets</h4>
+                <div class="preset-buttons" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <button type="button" class="btn btn-secondary" onclick="applyPreset(50, 30, 20)">50/30/20 Rule</button>
+                    <button type="button" class="btn btn-secondary" onclick="applyPreset(60, 20, 20)">Conservative</button>
+                    <button type="button" class="btn btn-secondary" onclick="applyPreset(40, 40, 20)">Balanced</button>
+                    <button type="button" class="btn btn-secondary" onclick="applyPreset(30, 40, 30)">Aggressive Savings</button>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Save Budget Rules</button>
+        </form>
+    </div>
+</div>
+
+<div class="current-budget">
+    <div class="card">
+        <h3>Current Budget Breakdown</h3>
+        <div class="row">
+            <div class="col-6">
+                <canvas id="budgetChart"></canvas>
+            </div>
+            <div class="col-6">
+                <div class="budget-details">
+                    <h4>Monthly Income: <span id="monthly-income">$0.00</span></h4>
+                    <div class="budget-breakdown">
+                        <div class="budget-item">
+                            <div class="category-header">
+                                <span class="category-color" style="background: #007AFF;"></span>
+                                <strong>Needs (<span id="needs-display">50</span>%)</strong>
+                            </div>
+                            <div class="amount">$<span id="needs-amount">0.00</span></div>
+                        </div>
+                        <div class="budget-item">
+                            <div class="category-header">
+                                <span class="category-color" style="background: #28a745;"></span>
+                                <strong>Wants (<span id="wants-display">30</span>%)</strong>
+                            </div>
+                            <div class="amount">$<span id="wants-amount">0.00</span></div>
+                        </div>
+                        <div class="budget-item">
+                            <div class="category-header">
+                                <span class="category-color" style="background: #ffc107;"></span>
+                                <strong>Savings (<span id="savings-display">20</span>%)</strong>
+                            </div>
+                            <div class="amount">$<span id="savings-amount">0.00</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="budget-vs-actual">
+    <div class="card">
+        <h3>Budget vs. Actual Spending</h3>
+        <div class="comparison-section">
+            <div class="row">
+                <div class="col-4">
+                    <h4>Needs</h4>
+                    <div class="progress">
+                        <div class="progress-bar" id="needs-progress" style="background: #007AFF;"></div>
+                    </div>
+                    <div class="comparison-details">
+                        <p>Budgeted: <span id="needs-budgeted">$0.00</span></p>
+                        <p>Actual: <span id="needs-actual">$0.00</span></p>
+                        <p>Remaining: <span id="needs-remaining">$0.00</span></p>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <h4>Wants</h4>
+                    <div class="progress">
+                        <div class="progress-bar" id="wants-progress" style="background: #28a745;"></div>
+                    </div>
+                    <div class="comparison-details">
+                        <p>Budgeted: <span id="wants-budgeted">$0.00</span></p>
+                        <p>Actual: <span id="wants-actual">$0.00</span></p>
+                        <p>Remaining: <span id="wants-remaining">$0.00</span></p>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <h4>Savings</h4>
+                    <div class="progress">
+                        <div class="progress-bar" id="savings-progress" style="background: #ffc107;"></div>
+                    </div>
+                    <div class="comparison-details">
+                        <p>Budgeted: <span id="savings-budgeted">$0.00</span></p>
+                        <p>Actual: <span id="savings-actual">$0.00</span></p>
+                        <p>Remaining: <span id="savings-remaining">$0.00</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="budget-tips">
+    <div class="card">
+        <h3>Budget Planning Tips</h3>
+        <div class="row">
+            <div class="col-6">
+                <h4>The 50/30/20 Rule</h4>
+                <ul>
+                    <li><strong>50% Needs:</strong> Essential expenses like housing, food, utilities, transportation</li>
+                    <li><strong>30% Wants:</strong> Entertainment, dining out, hobbies, non-essential shopping</li>
+                    <li><strong>20% Savings:</strong> Emergency fund, retirement, debt repayment, investments</li>
+                </ul>
+            </div>
+            <div class="col-6">
+                <h4>Customization Tips</h4>
+                <ul>
+                    <li>If you have high fixed costs, increase the "Needs" percentage</li>
+                    <li>If you're debt-free, you can allocate more to "Wants" or "Savings"</li>
+                    <li>For aggressive savers, consider 30% or more for savings</li>
+                    <li>Review and adjust your budget monthly based on actual spending</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.budget-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background: rgba(0, 122, 255, 0.05);
+    border-radius: 8px;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.category-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.amount {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #007AFF;
+}
+
+.total-display {
+    font-size: 1.2rem;
+    padding: 1rem;
+    background: rgba(0, 122, 255, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.comparison-details p {
+    margin: 0.2rem 0;
+}
+
+.comparison-details span {
+    font-weight: 600;
+}
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let budgetChart;
+    let currentData = {};
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        loadBudgetData();
+        setupEventListeners();
+    });
+    
+    function setupEventListeners() {
+        const needsInput = document.getElementById('needs-percentage');
+        const wantsInput = document.getElementById('wants-percentage');
+        const savingsInput = document.getElementById('savings-percentage');
+        
+        [needsInput, wantsInput, savingsInput].forEach(input => {
+            input.addEventListener('input', updateTotal);
+        });
+        
+        document.getElementById('budget-form').addEventListener('submit', saveBudgetRules);
+    }
+    
+    function updateTotal() {
+        const needs = parseInt(document.getElementById('needs-percentage').value) || 0;
+        const wants = parseInt(document.getElementById('wants-percentage').value) || 0;
+        const savings = parseInt(document.getElementById('savings-percentage').value) || 0;
+        
+        const total = needs + wants + savings;
+        document.getElementById('total-percentage').textContent = total;
+        
+        const warningElement = document.getElementById('total-warning');
+        if (total !== 100) {
+            warningElement.style.display = 'inline';
+        } else {
+            warningElement.style.display = 'none';
+        }
+        
+        updateBudgetDisplay(needs, wants, savings);
+    }
+    
+    function applyPreset(needs, wants, savings) {
+        document.getElementById('needs-percentage').value = needs;
+        document.getElementById('wants-percentage').value = wants;
+        document.getElementById('savings-percentage').value = savings;
+        updateTotal();
+    }
+    
+    async function loadBudgetData() {
+        try {
+            const data = await apiCall('/api/data');
+            const projections = await apiCall('/api/projections');
+            
+            currentData = data;
+            
+            // Update form with current budget rules
+            document.getElementById('needs-percentage').value = data.budget_rules.needs;
+            document.getElementById('wants-percentage').value = data.budget_rules.wants;
+            document.getElementById('savings-percentage').value = data.budget_rules.savings;
+            
+            updateTotal();
+            
+            // Update monthly income
+            const monthlyIncome = projections.length > 0 ? projections[0].income : 0;
+            document.getElementById('monthly-income').textContent = formatCurrency(monthlyIncome);
+            
+            // Update budget chart
+            updateBudgetChart(data.budget_rules);
+            
+            // Update budget vs actual
+            updateBudgetVsActual(data, projections);
+            
+        } catch (error) {
+            console.error('Error loading budget data:', error);
+            showNotification('Error loading budget data', 'error');
+        }
+    }
+    
+    function updateBudgetDisplay(needs, wants, savings) {
+        document.getElementById('needs-display').textContent = needs;
+        document.getElementById('wants-display').textContent = wants;
+        document.getElementById('savings-display').textContent = savings;
+        
+        // Calculate amounts based on current income
+        const monthlyIncomeText = document.getElementById('monthly-income').textContent;
+        const monthlyIncome = parseFloat(monthlyIncomeText.replace(/[$,]/g, '')) || 0;
+        
+        const needsAmount = (monthlyIncome * needs) / 100;
+        const wantsAmount = (monthlyIncome * wants) / 100;
+        const savingsAmount = (monthlyIncome * savings) / 100;
+        
+        document.getElementById('needs-amount').textContent = needsAmount.toFixed(2);
+        document.getElementById('wants-amount').textContent = wantsAmount.toFixed(2);
+        document.getElementById('savings-amount').textContent = savingsAmount.toFixed(2);
+        
+        // Update chart if it exists
+        if (budgetChart) {
+            budgetChart.data.datasets[0].data = [needs, wants, savings];
+            budgetChart.update();
+        }
+    }
+    
+    async function saveBudgetRules(event) {
+        event.preventDefault();
+        
+        const needs = parseInt(document.getElementById('needs-percentage').value) || 0;
+        const wants = parseInt(document.getElementById('wants-percentage').value) || 0;
+        const savings = parseInt(document.getElementById('savings-percentage').value) || 0;
+        
+        if (needs + wants + savings !== 100) {
+            showNotification('Budget percentages must total 100%', 'error');
+            return;
+        }
+        
+        const budgetRules = { needs, wants, savings };
+        
+        try {
+            await apiCall('/api/budget-rules', 'POST', budgetRules);
+            showNotification('Budget rules saved successfully!');
+            
+            // Reload data to update comparisons
+            loadBudgetData();
+            
+        } catch (error) {
+            console.error('Error saving budget rules:', error);
+            showNotification('Error saving budget rules', 'error');
+        }
+    }
+    
+    function updateBudgetChart(budgetRules) {
+        const ctx = document.getElementById('budgetChart').getContext('2d');
+        
+        if (budgetChart) {
+            budgetChart.destroy();
+        }
+        
+        budgetChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Needs', 'Wants', 'Savings'],
+                datasets: [{
+                    data: [budgetRules.needs, budgetRules.wants, budgetRules.savings],
+                    backgroundColor: ['#007AFF', '#28a745', '#ffc107'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateBudgetVsActual(data, projections) {
+        const budgetRules = data.budget_rules;
+        const monthlyIncome = projections.length > 0 ? projections[0].income : 0;
+        
+        // Calculate budgeted amounts
+        const needsBudgeted = (monthlyIncome * budgetRules.needs) / 100;
+        const wantsBudgeted = (monthlyIncome * budgetRules.wants) / 100;
+        const savingsBudgeted = (monthlyIncome * budgetRules.savings) / 100;
+        
+        // Calculate actual expenses by category
+        let needsActual = 0, wantsActual = 0, savingsActual = 0;
+        
+        data.expense_sources.forEach(source => {
+            if (source.active) {
+                const amount = calculateSourceAmount(source);
+                if (source.category === 'needs') needsActual += amount;
+                else if (source.category === 'wants') wantsActual += amount;
+                else if (source.category === 'savings') savingsActual += amount;
+            }
+        });
+        
+        // Update display
+        document.getElementById('needs-budgeted').textContent = formatCurrency(needsBudgeted);
+        document.getElementById('wants-budgeted').textContent = formatCurrency(wantsBudgeted);
+        document.getElementById('savings-budgeted').textContent = formatCurrency(savingsBudgeted);
+        
+        document.getElementById('needs-actual').textContent = formatCurrency(needsActual);
+        document.getElementById('wants-actual').textContent = formatCurrency(wantsActual);
+        document.getElementById('savings-actual').textContent = formatCurrency(savingsActual);
+        
+        // Calculate remaining
+        const needsRemaining = needsBudgeted - needsActual;
+        const wantsRemaining = wantsBudgeted - wantsActual;
+        const savingsRemaining = savingsBudgeted - savingsActual;
+        
+        document.getElementById('needs-remaining').textContent = formatCurrency(needsRemaining);
+        document.getElementById('wants-remaining').textContent = formatCurrency(wantsRemaining);
+        document.getElementById('savings-remaining').textContent = formatCurrency(savingsRemaining);
+        
+        // Update progress bars
+        updateProgressBar('needs-progress', needsActual, needsBudgeted);
+        updateProgressBar('wants-progress', wantsActual, wantsBudgeted);
+        updateProgressBar('savings-progress', savingsActual, savingsBudgeted);
+    }
+    
+    function updateProgressBar(elementId, actual, budgeted) {
+        const element = document.getElementById(elementId);
+        if (budgeted > 0) {
+            const percentage = Math.min((actual / budgeted) * 100, 100);
+            element.style.width = percentage + '%';
+            
+            // Change color based on usage
+            if (percentage > 100) {
+                element.style.background = '#dc3545'; // Red for over budget
+            } else if (percentage > 80) {
+                element.style.background = '#ffc107'; // Yellow for high usage
+            } else {
+                element.style.background = element.style.background; // Keep original color
+            }
+        }
+    }
+    
+    function calculateSourceAmount(source) {
+        if (source.type === 'recurring' && source.frequency === 'monthly') {
+            return source.amount;
+        } else if (source.type === 'recurring' && source.frequency === 'weekly') {
+            return source.amount * 4.33;
+        } else if (source.type === 'recurring' && source.frequency === 'biweekly') {
+            return source.amount * 2.17;
+        } else if (source.type === 'recurring' && source.frequency === 'yearly') {
+            return source.amount / 12;
+        }
+        return source.amount;
+    }
+</script>
+{% endblock %} 

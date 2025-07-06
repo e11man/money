@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - MoneyWise{% endblock %}
+{% block nav_preferences %}active{% endblock %}
+
+{% block content %}
+<div class="preferences-header">
+    <div class="card">
+        <h2>Application Settings</h2>
+        <p>Customize your MoneyWise experience</p>
+    </div>
+</div>
+
+<div class="current-balance">
+    <div class="card">
+        <h3>Current Balance</h3>
+        <p>Update your current money balance to ensure accurate projections</p>
+        <form id="balance-form">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="current-money">Current Money Balance</label>
+                        <input type="number" id="current-money" class="form-control" step="0.01" placeholder="0.00">
+                        <small>Your current available balance across all accounts</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn form-control">Update Balance</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="general-preferences">
+    <div class="card">
+        <h3>General Preferences</h3>
+        <form id="preferences-form">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="currency">Currency</label>
+                        <select id="currency" class="form-control">
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="date-format">Date Format</label>
+                        <select id="date-format" class="form-control">
+                            <option value="MM/DD/YYYY">MM/DD/YYYY (US)</option>
+                            <option value="DD/MM/YYYY">DD/MM/YYYY (UK)</option>
+                            <option value="YYYY-MM-DD">YYYY-MM-DD (ISO)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="fiscal-year">Fiscal Year Start</label>
+                        <select id="fiscal-year" class="form-control">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="projection-years">Projection Years</label>
+                        <select id="projection-years" class="form-control">
+                            <option value="1">1 Year</option>
+                            <option value="2">2 Years</option>
+                            <option value="3">3 Years</option>
+                            <option value="5">5 Years</option>
+                            <option value="10">10 Years</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="default-income-type">Default Income Type</label>
+                        <select id="default-income-type" class="form-control">
+                            <option value="recurring">Recurring</option>
+                            <option value="one-time">One-time</option>
+                            <option value="specific-months">Specific Months</option>
+                            <option value="monthly-until">Monthly Until</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="default-expense-type">Default Expense Type</label>
+                        <select id="default-expense-type" class="form-control">
+                            <option value="recurring">Recurring</option>
+                            <option value="one-time">One-time</option>
+                            <option value="specific-months">Specific Months</option>
+                            <option value="monthly-until">Monthly Until</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Save Preferences</button>
+        </form>
+    </div>
+</div>
+
+<div class="data-management">
+    <div class="card">
+        <h3>Data Management</h3>
+        <div class="row">
+            <div class="col-6">
+                <h4>Export Data</h4>
+                <p>Download your financial data as a JSON file for backup or analysis.</p>
+                <button class="btn btn-secondary" onclick="exportData()">Export All Data</button>
+            </div>
+            <div class="col-6">
+                <h4>Import Data</h4>
+                <p>Import previously exported data to restore your financial information.</p>
+                <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importData(event)">
+                <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">Import Data</button>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <h4 style="color: #dc3545;">Danger Zone</h4>
+                <p>Permanently delete all your financial data. This action cannot be undone.</p>
+                <button class="btn btn-danger" onclick="resetAllData()">Reset All Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-info">
+    <div class="card">
+        <h3>Application Information</h3>
+        <div class="row">
+            <div class="col-6">
+                <h4>About MoneyWise</h4>
+                <p><strong>Version:</strong> 1.0.0</p>
+                <p><strong>Built with:</strong> Flask + HTML/CSS/JavaScript</p>
+                <p><strong>Data Storage:</strong> Local JSON files</p>
+                <p><strong>Charts:</strong> Chart.js</p>
+            </div>
+            <div class="col-6">
+                <h4>Features</h4>
+                <ul>
+                    <li>Customizable budget planning</li>
+                    <li>Flexible income & expense tracking</li>
+                    <li>Investment portfolio monitoring</li>
+                    <li>Balance projections</li>
+                    <li>Data visualization</li>
+                    <li>Apple-inspired design</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tips-section">
+    <div class="card">
+        <h3>Pro Tips</h3>
+        <div class="row">
+            <div class="col-6">
+                <h4>Getting the Most from MoneyWise</h4>
+                <ul>
+                    <li>Update your current balance regularly for accurate projections</li>
+                    <li>Review and adjust your budget monthly</li>
+                    <li>Use specific categories for expenses to track spending patterns</li>
+                    <li>Set up all recurring income and expenses for better automation</li>
+                    <li>Export your data regularly as a backup</li>
+                </ul>
+            </div>
+            <div class="col-6">
+                <h4>Best Practices</h4>
+                <ul>
+                    <li>Follow the 50/30/20 rule as a starting point</li>
+                    <li>Track your net worth monthly (assets - liabilities)</li>
+                    <li>Build an emergency fund of 3-6 months expenses</li>
+                    <li>Automate your savings and investments</li>
+                    <li>Review your progress regularly and adjust as needed</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let currentData = {};
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        loadPreferences();
+        setupEventListeners();
+    });
+    
+    function setupEventListeners() {
+        document.getElementById('preferences-form').addEventListener('submit', savePreferences);
+        document.getElementById('balance-form').addEventListener('submit', updateBalance);
+    }
+    
+    async function loadPreferences() {
+        try {
+            const data = await apiCall('/api/data');
+            currentData = data;
+            
+            // Update balance form
+            document.getElementById('current-money').value = data.current_money || 0;
+            
+            // Update preferences form
+            const prefs = data.preferences || {};
+            document.getElementById('currency').value = prefs.currency || 'USD';
+            document.getElementById('date-format').value = prefs.date_format || 'MM/DD/YYYY';
+            document.getElementById('fiscal-year').value = prefs.fiscal_year_start || 1;
+            document.getElementById('projection-years').value = prefs.projection_years || 5;
+            document.getElementById('default-income-type').value = prefs.default_income_type || 'recurring';
+            document.getElementById('default-expense-type').value = prefs.default_expense_type || 'recurring';
+            
+        } catch (error) {
+            console.error('Error loading preferences:', error);
+            showNotification('Error loading preferences', 'error');
+        }
+    }
+    
+    async function updateBalance(event) {
+        event.preventDefault();
+        
+        const currentMoney = parseFloat(document.getElementById('current-money').value) || 0;
+        
+        const updatedData = {
+            ...currentData,
+            current_money: currentMoney
+        };
+        
+        try {
+            await apiCall('/api/data', 'POST', updatedData);
+            showNotification('Balance updated successfully!');
+            currentData = updatedData;
+            
+        } catch (error) {
+            console.error('Error updating balance:', error);
+            showNotification('Error updating balance', 'error');
+        }
+    }
+    
+    async function savePreferences(event) {
+        event.preventDefault();
+        
+        const preferences = {
+            currency: document.getElementById('currency').value,
+            date_format: document.getElementById('date-format').value,
+            fiscal_year_start: parseInt(document.getElementById('fiscal-year').value),
+            projection_years: parseInt(document.getElementById('projection-years').value),
+            default_income_type: document.getElementById('default-income-type').value,
+            default_expense_type: document.getElementById('default-expense-type').value
+        };
+        
+        const updatedData = {
+            ...currentData,
+            preferences: preferences
+        };
+        
+        try {
+            await apiCall('/api/data', 'POST', updatedData);
+            showNotification('Preferences saved successfully!');
+            currentData = updatedData;
+            
+        } catch (error) {
+            console.error('Error saving preferences:', error);
+            showNotification('Error saving preferences', 'error');
+        }
+    }
+    
+    async function exportData() {
+        try {
+            const data = await apiCall('/api/data');
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `moneywise_backup_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showNotification('Data exported successfully!');
+            
+        } catch (error) {
+            console.error('Error exporting data:', error);
+            showNotification('Error exporting data', 'error');
+        }
+    }
+    
+    async function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        try {
+            const fileText = await file.text();
+            const importedData = JSON.parse(fileText);
+            
+            // Validate data structure (basic validation)
+            if (!importedData || typeof importedData !== 'object') {
+                throw new Error('Invalid data format');
+            }
+            
+            // Confirm with user
+            if (!confirm('This will replace all your current data. Are you sure you want to continue?')) {
+                return;
+            }
+            
+            await apiCall('/api/data', 'POST', importedData);
+            showNotification('Data imported successfully!');
+            
+            // Reload the page to reflect changes
+            window.location.reload();
+            
+        } catch (error) {
+            console.error('Error importing data:', error);
+            showNotification('Error importing data: ' + error.message, 'error');
+        }
+        
+        // Reset file input
+        event.target.value = '';
+    }
+    
+    async function resetAllData() {
+        const confirmText = prompt('Type "RESET" to confirm you want to delete all data:');
+        if (confirmText !== 'RESET') {
+            return;
+        }
+        
+        const defaultData = {
+            current_money: 0,
+            investments: 0,
+            budget_rules: {
+                needs: 50,
+                wants: 30,
+                savings: 20
+            },
+            income_sources: [],
+            expense_sources: [],
+            yearly_data: {},
+            preferences: {
+                currency: 'USD',
+                date_format: 'MM/DD/YYYY',
+                fiscal_year_start: 1,
+                projection_years: 5,
+                default_income_type: 'recurring',
+                default_expense_type: 'recurring'
+            }
+        };
+        
+        try {
+            await apiCall('/api/data', 'POST', defaultData);
+            showNotification('All data has been reset!');
+            
+            // Reload the page
+            window.location.reload();
+            
+        } catch (error) {
+            console.error('Error resetting data:', error);
+            showNotification('Error resetting data', 'error');
+        }
+    }
+</script>
+{% endblock %} 

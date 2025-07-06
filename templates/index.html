@@ -8,7 +8,7 @@
 <section class="hero-section">
     <div class="card text-center">
         <div class="mb-8">
-            <div class="icon-container" style="width: 96px; height: 96px; margin: 0 auto var(--space-8) auto; background-color: var(--primary);">
+            <div class="icon-container" style="width: 96px; height: 96px; margin: 0 auto var(--space-8) auto; background-color: var(--accent);">
                 <svg class="icon-xl" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 9V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2m2 4h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <circle cx="16" cy="13" r="1" fill="white"/>
@@ -21,7 +21,7 @@
         </div>
         
         <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
-            <a href="/dashboard" class="btn btn-lg">
+            <a href="/dashboard" class="btn btn-primary btn-lg">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -79,7 +79,7 @@
                 <p class="text-gray-600 mb-6">
                     Track multiple revenue streams with precision. Handle salary, freelance, investments, and passive income with automated scheduling.
                 </p>
-                <a href="/income" class="btn btn-accent">
+                <a href="/income" class="btn">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2v20m9-9H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -99,7 +99,7 @@
                 <p class="text-gray-600 mb-6">
                     Comprehensive expense tracking with intelligent categorization. Identify patterns, eliminate waste, and optimize spending habits.
                 </p>
-                <a href="/expenses" class="btn" style="background-color: var(--warning); color: var(--white);">
+                <a href="/expenses" class="btn" style="background-color: var(--warning); color: var(--surface);">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2m0-2v4h8V2m-8 6h8m-8 4h8m-8 4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -121,7 +121,7 @@
                 <p class="text-gray-600 mb-6">
                     Professional portfolio monitoring with institutional-grade analytics. Track performance, assess risk, and optimize returns.
                 </p>
-                <a href="/investments" class="btn" style="background-color: var(--success); color: var(--white);">
+                <a href="/investments" class="btn btn-success">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 11H7a2 2 0 00-2 2v7a2 2 0 002 2h2a2 2 0 002-2v-7a2 2 0 00-2-2zM13 7h2a2 2 0 012 2v11a2 2 0 01-2 2h-2a2 2 0 01-2-2V9a2 2 0 012-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -193,7 +193,7 @@
                         </svg>
                     </div>
                     <h4 class="text-sm text-gray-700 font-semibold mb-2">Current Balance</h4>
-                    <div class="text-2xl font-bold text-success" id="current-balance">$0.00</div>
+                    <div class="text-2xl font-bold text-success amount" id="current-balance">$0.00</div>
                 </div>
             </div>
             
@@ -205,7 +205,7 @@
                         </svg>
                     </div>
                     <h4 class="text-sm text-gray-700 font-semibold mb-2">Monthly Income</h4>
-                    <div class="text-2xl font-bold text-accent" id="monthly-income">$0.00</div>
+                    <div class="text-2xl font-bold text-accent amount" id="monthly-income">$0.00</div>
                 </div>
             </div>
             
@@ -217,7 +217,7 @@
                         </svg>
                     </div>
                     <h4 class="text-sm text-gray-700 font-semibold mb-2">Monthly Expenses</h4>
-                    <div class="text-2xl font-bold text-warning" id="monthly-expenses">$0.00</div>
+                    <div class="text-2xl font-bold text-warning amount" id="monthly-expenses">$0.00</div>
                 </div>
             </div>
             
@@ -229,7 +229,7 @@
                         </svg>
                     </div>
                     <h4 class="text-sm text-gray-700 font-semibold mb-2">Net Monthly</h4>
-                    <div class="text-2xl font-bold text-primary" id="net-monthly">$0.00</div>
+                    <div class="text-2xl font-bold text-primary amount" id="net-monthly">$0.00</div>
                 </div>
             </div>
         </div>

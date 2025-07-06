@@ -4,6 +4,137 @@
 {% block nav_dashboard %}active{% endblock %}
 
 {% block content %}
+<style>
+    .dashboard-header {
+        margin-bottom: var(--space-8);
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--space-4);
+        margin-bottom: var(--space-8);
+    }
+    
+    .stat-card {
+        background-color: var(--surface);
+        padding: var(--space-6);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--gray-200);
+        transition: var(--transition);
+    }
+    
+    .stat-card:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+    }
+    
+    .stat-card h4 {
+        font-family: var(--font-family-headings);
+        font-size: var(--font-size-sm);
+        color: var(--gray-600);
+        margin-bottom: var(--space-2);
+        font-weight: 600;
+    }
+    
+    .stat-card .value {
+        font-family: var(--font-family-mono);
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--primary);
+    }
+    
+    .charts-section {
+        margin-bottom: var(--space-8);
+    }
+    
+    .budget-overview {
+        margin-bottom: var(--space-8);
+    }
+    
+    .budget-section h4 {
+        font-family: var(--font-family-headings);
+        font-size: var(--font-size-lg);
+        color: var(--primary);
+        margin-bottom: var(--space-4);
+        font-weight: 600;
+    }
+    
+    .progress {
+        width: 100%;
+        height: 8px;
+        background-color: var(--gray-200);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-bottom: var(--space-3);
+    }
+    
+    .progress-bar {
+        height: 100%;
+        transition: var(--transition);
+        border-radius: var(--radius-lg);
+    }
+    
+    .budget-section p {
+        font-family: var(--font-family-body);
+        font-size: var(--font-size-sm);
+        color: var(--gray-600);
+        margin-bottom: var(--space-2);
+    }
+    
+    .budget-section .amount {
+        font-family: var(--font-family-mono);
+        font-weight: 600;
+        color: var(--text);
+    }
+    
+    .recent-activity {
+        margin-bottom: var(--space-8);
+    }
+    
+    .activity-section h3 {
+        font-family: var(--font-family-headings);
+        font-size: var(--font-size-xl);
+        color: var(--primary);
+        margin-bottom: var(--space-4);
+        font-weight: 600;
+    }
+    
+    .activity-item {
+        padding: var(--space-4);
+        margin-bottom: var(--space-3);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--gray-200);
+    }
+    
+    .activity-item strong {
+        font-family: var(--font-family-headings);
+        color: var(--text);
+    }
+    
+    .activity-item small {
+        font-family: var(--font-family-body);
+        color: var(--gray-600);
+    }
+    
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-4);
+    }
+    
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 <div class="dashboard-header">
     <div class="card">
         <h2>Financial Dashboard</h2>
@@ -15,27 +146,27 @@
     <div class="stats-grid">
         <div class="stat-card">
             <h4>Current Balance</h4>
-            <div class="value" id="current-balance">$0.00</div>
+            <div class="value amount" id="current-balance">$0.00</div>
         </div>
         <div class="stat-card">
             <h4>Monthly Income</h4>
-            <div class="value" id="monthly-income">$0.00</div>
+            <div class="value amount" id="monthly-income">$0.00</div>
         </div>
         <div class="stat-card">
             <h4>Monthly Expenses</h4>
-            <div class="value" id="monthly-expenses">$0.00</div>
+            <div class="value amount" id="monthly-expenses">$0.00</div>
         </div>
         <div class="stat-card">
             <h4>Net Monthly</h4>
-            <div class="value" id="net-monthly">$0.00</div>
+            <div class="value amount" id="net-monthly">$0.00</div>
         </div>
         <div class="stat-card">
             <h4>Investments</h4>
-            <div class="value" id="investments">$0.00</div>
+            <div class="value amount" id="investments">$0.00</div>
         </div>
         <div class="stat-card">
             <h4>Projected Balance (12 months)</h4>
-            <div class="value" id="projected-balance">$0.00</div>
+            <div class="value amount" id="projected-balance">$0.00</div>
         </div>
     </div>
 </div>
@@ -80,26 +211,26 @@
                 <div class="col-4">
                     <h4>Needs (<span id="needs-percentage">50</span>%)</h4>
                     <div class="progress">
-                        <div class="progress-bar" id="needs-progress" style="width: 0%; background: #007AFF;"></div>
+                        <div class="progress-bar" id="needs-progress" style="width: 0%; background: var(--primary);"></div>
                     </div>
-                    <p>Budgeted: <span id="needs-budgeted">$0.00</span></p>
-                    <p>Actual: <span id="needs-actual">$0.00</span></p>
+                    <p>Budgeted: <span class="amount" id="needs-budgeted">$0.00</span></p>
+                    <p>Actual: <span class="amount" id="needs-actual">$0.00</span></p>
                 </div>
                 <div class="col-4">
                     <h4>Wants (<span id="wants-percentage">30</span>%)</h4>
                     <div class="progress">
-                        <div class="progress-bar" id="wants-progress" style="width: 0%; background: #28a745;"></div>
+                        <div class="progress-bar" id="wants-progress" style="width: 0%; background: var(--accent);"></div>
                     </div>
-                    <p>Budgeted: <span id="wants-budgeted">$0.00</span></p>
-                    <p>Actual: <span id="wants-actual">$0.00</span></p>
+                    <p>Budgeted: <span class="amount" id="wants-budgeted">$0.00</span></p>
+                    <p>Actual: <span class="amount" id="wants-actual">$0.00</span></p>
                 </div>
                 <div class="col-4">
                     <h4>Savings (<span id="savings-percentage">20</span>%)</h4>
                     <div class="progress">
-                        <div class="progress-bar" id="savings-progress" style="width: 0%; background: #ffc107;"></div>
+                        <div class="progress-bar" id="savings-progress" style="width: 0%; background: var(--success);"></div>
                     </div>
-                    <p>Budgeted: <span id="savings-budgeted">$0.00</span></p>
-                    <p>Actual: <span id="savings-actual">$0.00</span></p>
+                    <p>Budgeted: <span class="amount" id="savings-budgeted">$0.00</span></p>
+                    <p>Actual: <span class="amount" id="savings-actual">$0.00</span></p>
                 </div>
             </div>
         </div>
@@ -131,9 +262,9 @@
 <div class="quick-actions">
     <div class="card">
         <h2>Quick Actions</h2>
-        <div class="actions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div class="actions-grid">
             <a href="/income" class="btn btn-success">Add Income Source</a>
-            <a href="/expenses" class="btn btn-danger">Add Expense</a>
+            <a href="/expenses" class="btn btn-error">Add Expense</a>
             <a href="/budget" class="btn btn-secondary">Update Budget</a>
             <a href="/investments" class="btn">Update Investments</a>
             <a href="/preferences" class="btn btn-secondary">Settings</a>
@@ -143,6 +274,7 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     let balanceChart, incomeExpenseChart, budgetChart, expenseCategoryChart;
     
@@ -151,7 +283,7 @@
             await loadDashboardData();
         } catch (error) {
             console.error('Error loading dashboard:', error);
-            showNotification('Error loading dashboard data', 'error');
+            // Graceful fallback for missing data
         }
     });
     
@@ -188,9 +320,9 @@
             // Set color for net monthly
             const netElement = document.getElementById('net-monthly');
             if (currentMonth.income - currentMonth.expenses >= 0) {
-                netElement.style.color = '#28a745';
+                netElement.style.color = 'var(--success)';
             } else {
-                netElement.style.color = '#dc3545';
+                netElement.style.color = 'var(--error)';
             }
             
             // Show projected balance for 12 months
@@ -264,8 +396,8 @@
                 datasets: [{
                     label: 'Balance',
                     data: projections.map(p => p.balance),
-                    borderColor: '#007AFF',
-                    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                    borderColor: 'var(--accent)',
+                    backgroundColor: 'rgba(38, 166, 154, 0.1)',
                     fill: true,
                     tension: 0.4
                 }]
@@ -300,11 +432,11 @@
                 datasets: [{
                     label: 'Income',
                     data: projections.slice(0, 6).map(p => p.income),
-                    backgroundColor: '#28a745'
+                    backgroundColor: 'var(--success)'
                 }, {
                     label: 'Expenses',
                     data: projections.slice(0, 6).map(p => p.expenses),
-                    backgroundColor: '#dc3545'
+                    backgroundColor: 'var(--error)'
                 }]
             },
             options: {
@@ -336,7 +468,7 @@
                 labels: ['Needs', 'Wants', 'Savings'],
                 datasets: [{
                     data: [data.budget_rules.needs, data.budget_rules.wants, data.budget_rules.savings],
-                    backgroundColor: ['#007AFF', '#28a745', '#ffc107']
+                    backgroundColor: ['var(--primary)', 'var(--accent)', 'var(--success)']
                 }]
             },
             options: {
@@ -375,7 +507,7 @@
                 labels: ['Needs', 'Wants', 'Savings'],
                 datasets: [{
                     data: [needs, wants, savings],
-                    backgroundColor: ['#007AFF', '#28a745', '#ffc107']
+                    backgroundColor: ['var(--primary)', 'var(--accent)', 'var(--success)']
                 }]
             },
             options: {
@@ -396,10 +528,12 @@
         
         data.income_sources.slice(0, 5).forEach(source => {
             const div = document.createElement('div');
-            div.style.cssText = 'padding: 0.5rem; margin-bottom: 0.5rem; background: rgba(0, 122, 255, 0.1); border-radius: 6px;';
+            div.className = 'activity-item';
+            div.style.backgroundColor = 'rgba(67, 160, 71, 0.1)';
+            div.style.borderColor = 'var(--success)';
             div.innerHTML = `
                 <strong>${source.name}</strong><br>
-                <small>${formatCurrency(source.amount)} - ${source.frequency || source.type}</small>
+                <small><span class="amount">${formatCurrency(source.amount)}</span> - ${source.frequency || source.type}</small>
             `;
             incomeList.appendChild(div);
         });
@@ -410,10 +544,12 @@
         
         data.expense_sources.slice(0, 5).forEach(source => {
             const div = document.createElement('div');
-            div.style.cssText = 'padding: 0.5rem; margin-bottom: 0.5rem; background: rgba(220, 53, 69, 0.1); border-radius: 6px;';
+            div.className = 'activity-item';
+            div.style.backgroundColor = 'rgba(229, 115, 115, 0.1)';
+            div.style.borderColor = 'var(--error)';
             div.innerHTML = `
                 <strong>${source.name}</strong><br>
-                <small>${formatCurrency(source.amount)} - ${source.category}</small>
+                <small><span class="amount">${formatCurrency(source.amount)}</span> - ${source.category}</small>
             `;
             expenseList.appendChild(div);
         });

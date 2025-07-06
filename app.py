@@ -19,18 +19,21 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')
 app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', 'True').lower() == 'true'
 
 # Data storage (in production, use a proper database)
-DATA_FILE = 'data/finance_data.json'
+app.config['DATA_FILE'] = 'data/finance_data.json'
 
 def ensure_data_directory():
     """Ensure data directory exists"""
-    if not os.path.exists('data'):
-        os.makedirs('data')
+    data_file = app.config.get('DATA_FILE', 'data/finance_data.json')
+    data_dir = os.path.dirname(data_file)
+    if data_dir and not os.path.exists(data_dir):
+        os.makedirs(data_dir)
 
 def load_data():
     """Load finance data from file"""
     ensure_data_directory()
+    data_file = app.config.get('DATA_FILE', 'data/finance_data.json')
     try:
-        with open(DATA_FILE, 'r') as f:
+        with open(data_file, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
         return get_default_data()
@@ -38,7 +41,8 @@ def load_data():
 def save_data(data):
     """Save finance data to file"""
     ensure_data_directory()
-    with open(DATA_FILE, 'w') as f:
+    data_file = app.config.get('DATA_FILE', 'data/finance_data.json')
+    with open(data_file, 'w') as f:
         json.dump(data, f, indent=2)
 
 def get_default_data():
